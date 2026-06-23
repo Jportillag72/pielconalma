@@ -13,6 +13,30 @@ function closeMenu() {
   menuToggle.querySelector(".sr-only").textContent = "Abrir menú";
 }
 
+function ensureFooterLegalLinks() {
+  const footerLinks = document.querySelector(".footer-links");
+  if (!footerLinks) return;
+
+  const legalLinks = [
+    ["Aviso Legal", "/aviso-legal.html"],
+    ["Política de Privacidad", "/politica-privacidad.html"],
+    ["Cookies", "/cookies.html"],
+  ];
+  const instagramLink = footerLinks.querySelector('a[href*="instagram.com"]');
+
+  legalLinks.forEach(([label, href]) => {
+    if (footerLinks.querySelector(`a[href="${href}"]`)) return;
+    const link = document.createElement("a");
+    link.href = href;
+    link.textContent = label;
+    if (instagramLink) {
+      footerLinks.insertBefore(link, instagramLink);
+    } else {
+      footerLinks.appendChild(link);
+    }
+  });
+}
+
 menuToggle.addEventListener("click", () => {
   const willOpen = !mainNav.classList.contains("open");
   mainNav.classList.toggle("open", willOpen);
@@ -78,4 +102,5 @@ copyButton.addEventListener("click", async () => {
   }
 });
 
+ensureFooterLegalLinks();
 document.querySelector("#year").textContent = new Date().getFullYear();
