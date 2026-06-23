@@ -160,6 +160,70 @@ footer {
   font-size: clamp(0.9rem, 1vw, 1rem);
 }
 
+.email-notice {
+  position: fixed;
+  z-index: 80;
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(1rem, 3vw, 2rem);
+  width: min(92vw, 360px);
+  padding: 1rem;
+  color: #fff9f5;
+  background: linear-gradient(135deg, var(--wine-dark), var(--wine));
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 24px;
+  box-shadow: 0 24px 58px rgba(33, 27, 24, 0.26);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(16px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.email-notice.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.email-notice strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-family: var(--display);
+  font-size: 1.65rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.email-notice p {
+  margin: 0 0 0.9rem;
+  color: rgba(255, 249, 245, 0.82);
+  font-size: 0.94rem;
+}
+
+.email-notice div div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.email-notice a,
+.email-notice button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  padding: 0.65rem 0.85rem;
+  color: var(--wine);
+  background: #fff6f0;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.email-notice button {
+  color: #fff9f5;
+  background: transparent;
+}
+
 @media (max-width: 520px) {
   .hero-cta-note,
   .text-link,
