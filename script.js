@@ -4,7 +4,9 @@ const navLinks = mainNav.querySelectorAll("a");
 const form = document.querySelector("#contact-form");
 const successPanel = document.querySelector("#form-success");
 const copyButton = document.querySelector("#copy-message");
+const openEmail = document.querySelector("#open-email");
 let preparedMessage = "";
+let preparedMailto = "mailto:info@pielconalma.com";
 
 function closeMenu() {
   mainNav.classList.remove("open");
@@ -18,7 +20,7 @@ function updateContactHeading() {
   if (contactHeading) contactHeading.textContent = "Nos cuentas qué necesitas";
 }
 
-function ensureFooterLegalLinks() {
+function ensureFooterLinks() {
   const footerLinks = document.querySelector(".footer-links");
   if (!footerLinks) return;
 
@@ -34,12 +36,15 @@ function ensureFooterLegalLinks() {
     const link = document.createElement("a");
     link.href = href;
     link.textContent = label;
-    if (instagramLink) {
-      footerLinks.insertBefore(link, instagramLink);
-    } else {
-      footerLinks.appendChild(link);
-    }
+    footerLinks.insertBefore(link, instagramLink || null);
   });
+
+  const footerInstagram = footerLinks.querySelector('a[href*="instagram.com"]');
+  if (footerInstagram) {
+    footerInstagram.href = "https://www.instagram.com/pielconalma/";
+    footerInstagram.removeAttribute("target");
+    footerInstagram.setAttribute("rel", "noopener noreferrer");
+  }
 }
 
 menuToggle.addEventListener("click", () => {
@@ -81,7 +86,7 @@ form.addEventListener("submit", (event) => {
 
   const data = new FormData(form);
   preparedMessage = [
-    "Hola Piel Con Alma, me gustaría pedir información.",
+    "Hola Piel Con Alma, me gustaría pedir información o cita.",
     "",
     `Nombre: ${data.get("name")}`,
     `Teléfono: ${data.get("phone")}`,
@@ -91,11 +96,17 @@ form.addEventListener("submit", (event) => {
     .filter(Boolean)
     .join("\n");
 
+  preparedMailto = `mailto:info@pielconalma.com?subject=${encodeURIComponent(
+    `Consulta web · ${data.get("treatment")}`,
+  )}&body=${encodeURIComponent(preparedMessage)}`;
+
+  if (openEmail) openEmail.href = preparedMailto;
   navigator.clipboard?.writeText(preparedMessage).catch(() => {});
   form.classList.add("submitted");
   successPanel.classList.add("show");
   form.scrollIntoView({ behavior: "smooth", block: "center" });
   copyButton.focus({ preventScroll: true });
+  window.location.href = preparedMailto;
 });
 
 copyButton.addEventListener("click", async () => {
@@ -107,6 +118,6 @@ copyButton.addEventListener("click", async () => {
   }
 });
 
-updateContactHeading();
-ensureFooterLegalLinks();
 document.querySelector("#year").textContent = new Date().getFullYear();
+updateContactHeading();
+ensureFooterLinks();
