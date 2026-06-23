@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Piel Con Alma">
+  <rect width="64" height="64" rx="18" fill="#f5eee7"/>
+  <circle cx="32" cy="32" r="22" fill="#e7c9c1" stroke="#672f3a" stroke-width="2"/>
+  <path d="M25 17c7 6 11 13 8 25-10-3-17-11-15-19 1-4 4-6 7-6Z" fill="none" stroke="#672f3a" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M39 20c-7 5-10 11-8 22 10-2 16-9 15-17-.7-3.6-3.4-5.5-7-5Z" fill="none" stroke="#672f3a" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M32 43c-2.2-6.8-.5-13 5-18" fill="none" stroke="#c97d65" stroke-width="2" stroke-linecap="round"/>
+</svg>
