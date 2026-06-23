@@ -1,0 +1,102 @@
+.hero-cta {
+  position: relative;
+  display: inline-flex;
+  max-width: 25rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.85rem;
+  background: rgba(255, 249, 245, 0.78);
+  border: 1px solid rgba(154, 93, 93, 0.18);
+  border-radius: 30px;
+  box-shadow: 0 24px 60px rgba(103, 47, 58, 0.14);
+}
+
+.hero-cta-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0.35rem 0.75rem;
+  color: var(--wine);
+  background: #fff;
+  border: 1px solid rgba(103, 47, 58, 0.16);
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.hero-cta-kicker::before {
+  width: 0.48rem;
+  height: 0.48rem;
+  content: "";
+  background: var(--clay);
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px rgba(183, 123, 95, 0.16);
+}
+
+.hero-cta-note {
+  max-width: 21rem;
+  margin: 0 0.25rem;
+  color: #5f514a;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.hero-primary-cta {
+  width: 100%;
+  min-height: 78px;
+  justify-content: flex-start;
+  padding: 1.05rem 1.15rem 1.05rem 1.55rem;
+  color: #fff9f5;
+  background:
+    radial-gradient(circle at 12% 15%, rgba(255, 255, 255, 0.26), transparent 32%),
+    linear-gradient(135deg, #5d2634 0%, var(--wine) 46%, var(--clay) 100%);
+  border-color: rgba(255, 255, 255, 0.32);
+  box-shadow: 0 24px 52px rgba(103, 47, 58, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  font-size: 1.02rem;
+  letter-spacing: 0.02em;
+}
+
+.hero-primary-cta strong,
+.hero-primary-cta small {
+  display: block;
+}
+
+.hero-primary-cta strong {
+  font-size: clamp(1rem, 1.25vw, 1.16rem);
+}
+
+.hero-primary-cta small {
+  margin-top: 0.18rem;
+  color: rgba(255, 249, 245, 0.78);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-primary-cta span {
+  flex: 0 0 auto;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  margin-left: auto;
+  place-items: center;
+  color: var(--wine);
+  background: #fff6f0;
+  border-radius: 50%;
+  transition: transform 0.25s ease;
+}
+
+.hero-primary-cta:hover {
+  background: linear-gradient(135deg, var(--wine-dark), var(--wine));
+  box-shadow: 0 30px 62px rgba(103, 47, 58, 0.42);
+}
+
+.hero-primary-cta:hover span {
+  transform: translate(2px, -2px);
+}
