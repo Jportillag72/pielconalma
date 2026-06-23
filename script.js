@@ -13,6 +13,11 @@ function closeMenu() {
   menuToggle.querySelector(".sr-only").textContent = "Abrir menú";
 }
 
+function updateContactHeading() {
+  const contactHeading = document.querySelector("#contacto h2");
+  if (contactHeading) contactHeading.textContent = "Nos cuentas qué necesitas";
+}
+
 function ensureFooterLegalLinks() {
   const footerLinks = document.querySelector(".footer-links");
   if (!footerLinks) return;
@@ -102,5 +107,6 @@ copyButton.addEventListener("click", async () => {
   }
 });
 
+updateContactHeading();
 ensureFooterLegalLinks();
 document.querySelector("#year").textContent = new Date().getFullYear();
