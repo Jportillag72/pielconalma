@@ -20,6 +20,15 @@ function updateContactHeading() {
   if (contactHeading) contactHeading.textContent = "Nos cuentas qué necesitas";
 }
 
+function ensureFavicon() {
+  if (document.querySelector('link[rel="icon"]')) return;
+  const favicon = document.createElement("link");
+  favicon.rel = "icon";
+  favicon.type = "image/svg+xml";
+  favicon.href = "/assets/favicon.svg";
+  document.head.appendChild(favicon);
+}
+
 function ensureFooterLinks() {
   const footerLinks = document.querySelector(".footer-links");
   if (!footerLinks) return;
@@ -119,5 +128,6 @@ copyButton.addEventListener("click", async () => {
 });
 
 document.querySelector("#year").textContent = new Date().getFullYear();
+ensureFavicon();
 updateContactHeading();
 ensureFooterLinks();
