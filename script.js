@@ -5,8 +5,9 @@ const form = document.querySelector("#contact-form");
 const successPanel = document.querySelector("#form-success");
 const copyButton = document.querySelector("#copy-message");
 const openEmail = document.querySelector("#open-email");
+const contactEmail = "info@pielconalma.com";
 let preparedMessage = "";
-let preparedMailto = "mailto:info@pielconalma.com";
+let preparedMailto = `mailto:${contactEmail}`;
 
 function closeMenu() {
   mainNav.classList.remove("open");
@@ -56,6 +57,59 @@ function ensureFooterLinks() {
   }
 }
 
+function showEmailNotice(mailto) {
+  let notice = document.querySelector(".email-notice");
+
+  if (!notice) {
+    notice = document.createElement("div");
+    notice.className = "email-notice";
+    notice.setAttribute("role", "status");
+    notice.setAttribute("aria-live", "polite");
+    document.body.appendChild(notice);
+  }
+
+  notice.innerHTML = "";
+
+  const copy = document.createElement("div");
+  const title = document.createElement("strong");
+  const text = document.createElement("p");
+  const actions = document.createElement("div");
+  const emailLink = document.createElement("a");
+  const closeButton = document.createElement("button");
+
+  title.textContent = "Abrimos tu correo";
+  text.textContent = `Si no se abre automáticamente, escríbenos a ${contactEmail}.`;
+  emailLink.href = mailto;
+  emailLink.textContent = "Abrir email";
+  closeButton.type = "button";
+  closeButton.textContent = "Cerrar";
+  closeButton.addEventListener("click", () => notice.classList.remove("show"));
+
+  actions.append(emailLink, closeButton);
+  copy.append(title, text, actions);
+  notice.append(copy);
+  notice.classList.add("show");
+
+  window.clearTimeout(showEmailNotice.timeoutId);
+  showEmailNotice.timeoutId = window.setTimeout(() => {
+    notice.classList.remove("show");
+  }, 7000);
+}
+
+function prepareEmailClick(event) {
+  const link = event.currentTarget;
+  const mailto = link.getAttribute("href");
+
+  if (!mailto || !mailto.startsWith("mailto:")) return;
+
+  event.preventDefault();
+  navigator.clipboard?.writeText(contactEmail).catch(() => {});
+  showEmailNotice(mailto);
+  window.setTimeout(() => {
+    window.location.href = mailto;
+  }, 80);
+}
+
 menuToggle.addEventListener("click", () => {
   const willOpen = !mainNav.classList.contains("open");
   mainNav.classList.toggle("open", willOpen);
@@ -65,6 +119,10 @@ menuToggle.addEventListener("click", () => {
 });
 
 navLinks.forEach((link) => link.addEventListener("click", closeMenu));
+
+document
+  .querySelectorAll(`a[href^="mailto:${contactEmail}"]`)
+  .forEach((link) => link.addEventListener("click", prepareEmailClick));
 
 document.querySelectorAll(".faq-list details").forEach((detail) => {
   detail.addEventListener("toggle", () => {
@@ -105,7 +163,7 @@ form.addEventListener("submit", (event) => {
     .filter(Boolean)
     .join("\n");
 
-  preparedMailto = `mailto:info@pielconalma.com?subject=${encodeURIComponent(
+  preparedMailto = `mailto:${contactEmail}?subject=${encodeURIComponent(
     `Consulta web · ${data.get("treatment")}`,
   )}&body=${encodeURIComponent(preparedMessage)}`;
 
