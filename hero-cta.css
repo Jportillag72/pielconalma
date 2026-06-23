@@ -125,12 +125,12 @@
 .hero-trust {
   max-width: 38rem;
   gap: 0.7rem;
-  font-size: clamp(0.84rem, 0.98vw, 0.95rem);
+  font-size: clamp(0.95rem, 1.05vw, 1.05rem);
   line-height: 1.35;
 }
 
 .hero-trust span {
-  font-size: clamp(0.68rem, 0.78vw, 0.78rem);
+  font-size: clamp(0.78rem, 0.86vw, 0.86rem);
   font-weight: 700;
 }
 
