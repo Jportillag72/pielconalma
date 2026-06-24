@@ -3,8 +3,6 @@ const mainNav = document.querySelector(".main-nav");
 const navLinks = mainNav.querySelectorAll("a");
 const form = document.querySelector("#contact-form");
 const successPanel = document.querySelector("#form-success");
-const copyButton = document.querySelector("#copy-message");
-const openEmail = document.querySelector("#open-email");
 const contactEmail = "info@pielconalma.com";
 let preparedMessage = "";
 let preparedMailto = `mailto:${contactEmail}`;
@@ -118,6 +116,36 @@ function refineTreatmentsContent() {
   if (footerText) {
     footerText.textContent =
       "También realizamos tratamientos de oxigenación, hidratación y bienestar. En la valoración te orientamos para elegir el protocolo que mejor encaje con tu piel.";
+  }
+}
+
+function ensureContactFormSendsDirectly() {
+  form.setAttribute("action", "/api/contact");
+  form.setAttribute("method", "post");
+  form.removeAttribute("enctype");
+
+  const submitButton = form.querySelector('button[type="submit"]');
+  const formNote = form.querySelector(".form-note");
+  const successTitle = successPanel.querySelector("strong");
+  const successText = successPanel.querySelector("p");
+
+  if (submitButton) submitButton.childNodes[0].textContent = "Enviar consulta ";
+  if (formNote) formNote.textContent = `Enviaremos tu consulta directamente a ${contactEmail}.`;
+  if (successTitle) successTitle.textContent = "Consulta enviada.";
+  if (successText) {
+    successText.textContent =
+      `Gracias por escribirnos. Hemos enviado tus datos a ${contactEmail} y te responderemos lo antes posible.`;
+  }
+
+  successPanel.querySelector("#copy-message")?.remove();
+  successPanel.querySelector("#open-email")?.remove();
+
+  if (!successPanel.querySelector("#reset-form")) {
+    const resetButton = document.createElement("button");
+    resetButton.type = "button";
+    resetButton.id = "reset-form";
+    resetButton.textContent = "Enviar otra consulta";
+    successPanel.querySelector("div")?.appendChild(resetButton);
   }
 }
 
@@ -247,11 +275,27 @@ const revealObserver = new IntersectionObserver(
 
 document.querySelectorAll(".reveal").forEach((element) => revealObserver.observe(element));
 
-form.addEventListener("submit", (event) => {
+function showFormStatus(type, title, message) {
+  const icon = successPanel.querySelector(":scope > span");
+  const heading = successPanel.querySelector("strong");
+  const text = successPanel.querySelector("p");
+
+  successPanel.classList.toggle("is-error", type === "error");
+  if (icon) icon.textContent = type === "error" ? "!" : "✓";
+  if (heading) heading.textContent = title;
+  if (text) text.textContent = message;
+  form.classList.add("submitted");
+  successPanel.classList.add("show");
+  form.scrollIntoView({ behavior: "smooth", block: "center" });
+  successPanel.querySelector("#reset-form")?.focus({ preventScroll: true });
+}
+
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
   if (!form.reportValidity()) return;
 
   const data = new FormData(form);
+  const submitButton = form.querySelector('button[type="submit"]');
   preparedMessage = [
     "Hola Piel Con Alma, me gustaría pedir información o cita.",
     "",
@@ -263,26 +307,52 @@ form.addEventListener("submit", (event) => {
     .filter(Boolean)
     .join("\n");
 
-  preparedMailto = `mailto:${contactEmail}?subject=${encodeURIComponent(
-    `Consulta web · ${data.get("treatment")}`,
-  )}&body=${encodeURIComponent(preparedMessage)}`;
+  submitButton.disabled = true;
+  submitButton.dataset.originalText = submitButton.textContent;
+  submitButton.childNodes[0].textContent = "Enviando consulta ";
 
-  if (openEmail) openEmail.href = preparedMailto;
-  navigator.clipboard?.writeText(preparedMessage).catch(() => {});
-  form.classList.add("submitted");
-  successPanel.classList.add("show");
-  form.scrollIntoView({ behavior: "smooth", block: "center" });
-  copyButton.focus({ preventScroll: true });
-  window.location.href = preparedMailto;
+  try {
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: data.get("name"),
+        phone: data.get("phone"),
+        treatment: data.get("treatment"),
+        message: data.get("message") || "",
+        privacy: true,
+      }),
+    });
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.message || "No se ha podido enviar la consulta.");
+
+    form.reset();
+    showFormStatus(
+      "success",
+      "Consulta enviada.",
+      "Gracias por escribirnos. Hemos enviado tus datos a info@pielconalma.com y te responderemos lo antes posible.",
+    );
+  } catch (error) {
+    showFormStatus(
+      "error",
+      "No se ha podido enviar.",
+      `${error.message} Si lo prefieres, escríbenos directamente a ${contactEmail}.`,
+    );
+  } finally {
+    submitButton.disabled = false;
+    submitButton.childNodes[0].textContent = "Enviar consulta ";
+  }
 });
 
-copyButton.addEventListener("click", async () => {
-  try {
-    await navigator.clipboard.writeText(preparedMessage);
-    copyButton.textContent = "¡Mensaje copiado!";
-  } catch {
-    copyButton.textContent = "Selecciona y copia el mensaje";
-  }
+document.addEventListener("click", (event) => {
+  if (!event.target.matches("#reset-form")) return;
+
+  form.classList.remove("submitted");
+  successPanel.classList.remove("show", "is-error");
+  form.querySelector("#name")?.focus();
 });
 
 document.querySelector("#year").textContent = new Date().getFullYear();
@@ -291,5 +361,6 @@ refineLargeHeadings();
 ensureHeroHeadingStyles();
 updateContactHeading();
 refineTreatmentsContent();
+ensureContactFormSendsDirectly();
 ensureFooterLinks();
 ensureValuationCtaTargetsForm();
