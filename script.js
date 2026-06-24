@@ -18,7 +18,7 @@ function closeMenu() {
 
 function updateContactHeading() {
   const contactHeading = document.querySelector("#contacto h2");
-  if (contactHeading) contactHeading.textContent = "Nos cuentas qué necesitas";
+  if (contactHeading) contactHeading.textContent = "Cuéntanos que necesitas";
 }
 
 function refineLargeHeadings() {
@@ -31,6 +31,53 @@ function refineLargeHeadings() {
   if (journeyHeading && journeyHeading.textContent.includes("Tu primera valoración facial")) {
     journeyHeading.innerHTML = "Valoración facial<br />en Salamanca.";
   }
+}
+
+function ensureHeroHeadingStyles() {
+  if (document.querySelector("#hero-heading-balance")) return;
+
+  const style = document.createElement("style");
+  style.id = "hero-heading-balance";
+  style.textContent = `
+    .hero h1 {
+      max-width: 15ch !important;
+      font-size: clamp(3.7rem, 5.8vw, 6.8rem) !important;
+      line-height: 0.92 !important;
+      text-wrap: balance;
+      overflow-wrap: normal;
+      hyphens: none;
+    }
+
+    .journey .section-heading.compact h2 {
+      max-width: 17ch !important;
+      font-size: clamp(3rem, 4.7vw, 5.4rem) !important;
+      text-wrap: balance;
+      overflow-wrap: normal;
+      hyphens: none;
+    }
+
+    @media (max-width: 800px) {
+      .hero h1 {
+        max-width: 15ch !important;
+        font-size: clamp(3.35rem, 10.2vw, 5.1rem) !important;
+        line-height: 0.94 !important;
+      }
+
+      .journey .section-heading.compact h2 {
+        max-width: 17ch !important;
+        font-size: clamp(3rem, 8.8vw, 4.6rem) !important;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .hero h1 {
+        max-width: 15ch !important;
+        font-size: clamp(3rem, 10.5vw, 4.05rem) !important;
+        line-height: 0.96 !important;
+      }
+    }
+  `;
+  document.head.appendChild(style);
 }
 
 function ensureValuationCtaTargetsForm() {
@@ -217,6 +264,7 @@ copyButton.addEventListener("click", async () => {
 document.querySelector("#year").textContent = new Date().getFullYear();
 ensureFavicon();
 refineLargeHeadings();
+ensureHeroHeadingStyles();
 updateContactHeading();
 ensureFooterLinks();
 ensureValuationCtaTargetsForm();
