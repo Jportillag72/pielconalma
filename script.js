@@ -97,6 +97,30 @@ function ensureValuationCtaTargetsForm() {
   });
 }
 
+function refineTreatmentsContent() {
+  const descriptions = [
+    "Tratamiento facial de hidratación intensiva para mejorar la jugosidad, suavizar la textura y conseguir una piel de aspecto fresco, uniforme y luminoso.",
+    "Tratamientos faciales avanzados enfocados en acompañar los procesos naturales de renovación, firmeza y vitalidad de la piel, siempre ajustando el protocolo a su estado real.",
+    "Maniobras relajantes y estimulantes que liberan tensión y devuelven vitalidad al rostro en una experiencia de bienestar facial pensada para oxigenar, relajar y reconectar.",
+  ];
+
+  document.querySelectorAll(".treatment-card").forEach((card, index) => {
+    card.querySelector(".card-copy a")?.remove();
+    const description = card.querySelector(".card-description");
+    if (description && descriptions[index]) description.textContent = descriptions[index];
+  });
+
+  const treatmentFooter = document.querySelector(".treatment-footer");
+  if (!treatmentFooter) return;
+
+  treatmentFooter.querySelector("a")?.remove();
+  const footerText = treatmentFooter.querySelector("p");
+  if (footerText) {
+    footerText.textContent =
+      "También realizamos tratamientos de oxigenación, hidratación y bienestar. En la valoración te orientamos para elegir el protocolo que mejor encaje con tu piel.";
+  }
+}
+
 function ensureFavicon() {
   if (document.querySelector('link[rel="icon"]')) return;
   const favicon = document.createElement("link");
@@ -266,5 +290,6 @@ ensureFavicon();
 refineLargeHeadings();
 ensureHeroHeadingStyles();
 updateContactHeading();
+refineTreatmentsContent();
 ensureFooterLinks();
 ensureValuationCtaTargetsForm();
