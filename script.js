@@ -21,6 +21,35 @@ function updateContactHeading() {
   if (contactHeading) contactHeading.textContent = "Nos cuentas qué necesitas";
 }
 
+function refineLargeHeadings() {
+  const heroHeading = document.querySelector(".hero h1");
+  if (heroHeading && heroHeading.textContent.includes("Centro de estética facial")) {
+    heroHeading.innerHTML = "Estética facial<br /><em>en Salamanca.</em>";
+  }
+
+  const journeyHeading = document.querySelector(".journey .section-heading.compact h2");
+  if (journeyHeading && journeyHeading.textContent.includes("Tu primera valoración facial")) {
+    journeyHeading.innerHTML = "Valoración facial<br />en Salamanca.";
+  }
+}
+
+function ensureValuationCtaTargetsForm() {
+  const contact = document.querySelector("#contacto");
+  if (!contact) return;
+
+  document.querySelectorAll(".nav-cta, .hero-primary-cta").forEach((link) => {
+    if (!link.textContent.toLowerCase().includes("valoración")) return;
+
+    link.setAttribute("href", "#contacto");
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      closeMenu();
+      contact.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.history.pushState(null, "", "#contacto");
+    });
+  });
+}
+
 function ensureFavicon() {
   if (document.querySelector('link[rel="icon"]')) return;
   const favicon = document.createElement("link");
@@ -187,5 +216,7 @@ copyButton.addEventListener("click", async () => {
 
 document.querySelector("#year").textContent = new Date().getFullYear();
 ensureFavicon();
+refineLargeHeadings();
 updateContactHeading();
 ensureFooterLinks();
+ensureValuationCtaTargetsForm();
